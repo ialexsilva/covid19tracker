@@ -1,0 +1,68 @@
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name=viewport content="width=device-width, initial-scale=1">
+<!-- CSS -->
+<link rel="stylesheet" href="css/estilo.css" />
+<!-- JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="js/covidcatcher.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iamdustan-smoothscroll/0.4.0/smoothscroll.min.js"></script>
+<title>Coronavirus Tracker by Alex Silva</title>
+</head>
+<!-- Carrega conteúdo -->
+<div class="preloader">
+  <div class="preloader__content">
+    <div class="preloader__loader"></div>
+    <div class="preloader__txt">Carregando...</div>
+  </div>
+</div>
+<div class="container">
+  <div class="statistics">
+    <div class="global">
+      <div class="global__title">
+        Corona Virus Tracker
+      </div>
+      <div class="global__cases">
+        <h1></h1>
+        <h2>Total de casos</h2>
+      </div>
+      <div class="global__deaths">
+        <h1></h1>
+        <h2>Total de mortes</h2>
+      </div>
+      <div class="global__recovered">
+        <h1></h1>
+        <h2>Total de curados</h2>
+      </div>
+    </div>
+    <input type="text" id="search" name="country" placeholder="Pesquisar países">
+    <select class="custom-select" id="select" onchange="changeOrder()">
+      <option selected="" disabled="">Ordenar por</option>
+      <option value="cases">Total de casos</option>
+      <option value="deaths">Total de mortes</option>
+      <option value="recovered">Total de curados</option>
+    </select>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>País</th>
+          <th>Casos</th>
+          <th>Mortes</th>
+          <th>Curados</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="arrow">
+    <div class="arrow__up">
+    </div>
+    <div class="arrow__down">
+    </div>
+  </div>
+</div>
+</html>
