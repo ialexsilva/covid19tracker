@@ -11,216 +11,80 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iamdustan-smoothscroll/0.4.0/smoothscroll.min.js"></script>
 <title>Coronavirus Tracker by Alex Silva</title>
 </head>
-<!-- Carrega conteúdo -->
-<div class="preloader">
-  <div class="preloader__content">
-    <div class="preloader__loader"></div>
-    <div class="preloader__txt">Carregando...</div>
-  </div>
-</div>
+<!--
+Twitter: https://twitter.com/ialexsilva
+Github: https://github.com/ialexsilva/
+-->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<h1 class="title">TRACKER CORONAVÍRUS BRASIL</h1>
 <div class="container">
-  <div class="statistics">
-    <div class="global">
-      <div class="global__title">
-        Corona Virus Tracker
+  <!-- Estatísticas do card -->
+  <div class="card card-stats">
+    <!-- Card body -->
+    <div class="card-body">
+      <div class="col">
+        <h5 class="card-title text-uppercase text-muted">Total de casos</h5>
+        <span class="h2 font-weight-bold total_cases color-red count">0</span>
       </div>
-      <div class="global__cases">
-        <h1></h1>
-        <h2>Total de casos</h2>
-      </div>
-      <div class="global__deaths">
-        <h1></h1>
-        <h2>Total de mortes</h2>
-      </div>
-      <div class="global__recovered">
-        <h1></h1>
-        <h2>Total de curados</h2>
+      <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+        <i class="fas fa-users"></i>
       </div>
     </div>
-    <input type="text" id="search" name="country" placeholder="Pesquisar países">
-    <select class="custom-select" id="select" onchange="changeOrder()">
-      <option selected="" disabled="">Ordenar por</option>
-      <option value="cases">Total de casos</option>
-      <option value="deaths">Total de mortes</option>
-      <option value="recovered">Total de curados</option>
-    </select>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>País</th>
-          <th>Casos</th>
-          <th>Mortes</th>
-          <th>Curados</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
   </div>
-  <div class="arrow">
-    <div class="arrow__up">
+  <div class="card card-stats">
+    <!-- Card body -->
+    <div class="card-body">
+      <div class="col">
+        <h5 class="card-title text-uppercase text-muted">Mortes</h5>
+        <span class="h2 font-weight-bold deaths color-blue count">0</span>
+      </div>
+      <div class="icon icon-shape bg-gradient-blue text-white rounded-circle shadow">
+        <i class="fas fa-procedures"></i>
+      </div>
     </div>
-    <div class="arrow__down">
+  </div>
+  <div class="card card-stats">
+    <!-- Card body -->
+    <div class="card-body">
+      <div class="col">
+        <h5 class="card-title text-uppercase text-muted">Recuperados</h5>
+        <span class="h2 font-weight-bold recovered color-green count">0</span>
+      </div>
+      <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+        <i class="fas fa-child"></i>
+      </div>
+    </div>
+  </div>
+  <div class="card card-stats">
+    <!-- Card body -->
+    <div class="card-body">
+      <div class="col">
+        <h5 class="card-title text-uppercase text-muted">Novos casos diários</h5>
+        <span class="h2 font-weight-bold new_cases color-orange count">0</span>
+      </div>
+      <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+        <i class="fas fa-bell"></i>
+      </div>
     </div>
   </div>
 </div>
- <!-- SCRIPT -->
- <script type="text/javascript">
-// Adiciona um interceptador de solicitações
-axios.interceptors.request.use(
-    function (config) {
-      console.log("solicitação enviada", new Date());
-      return config;
-    },
-    function (error) {
-      preloader.classList.add("preloader--hidden");
-      alert(error);
-      return Promise.reject(error);
-    }
-  );
-  
-  var preloader = document.querySelector(".preloader");
-  
-  // Adiciona um interceptador da resposta
-  axios.interceptors.response.use(
-    function (response) {
-      preloader.classList.add("preloader--hidden");
-      return response;
-    },
-    function (error) {
-      preloader.classList.add("preloader--hidden");
-      alert(error);
-      return Promise.reject(error);
-    }
-  );
-  /// Lista de dados Global
-  function getGlobalData() {
-    return axios.get("https://corona.lmao.ninja/all");
-  }
-  /// Lista de países em JSON
-  function getCountriesData() {
-    return axios.get("https://corona.lmao.ninja/countries");
-  }
-  
-  axios
-    .all([getGlobalData(), getCountriesData()])
-    .then(
-      axios.spread(function (global, countries) {
-        //Global logs
-        console.log("%c Global", "color: #fb5e53");
-        console.log("Casos", global.data.cases);
-        console.log("Mortes", global.data.deaths);
-        console.log("Curados", global.data.recovered);
-  
-        var totalCases = global.data.cases.toLocaleString();
-        var totalDeaths = global.data.deaths.toLocaleString();
-        var totalRecovered = global.data.recovered.toLocaleString();
-  
-        document.getElementsByClassName(
-          "global__cases"
-        )[0].childNodes[1].innerHTML = totalCases;
-        document.getElementsByClassName(
-          "global__recovered"
-        )[0].childNodes[1].innerHTML = totalRecovered;
-        document.getElementsByClassName(
-          "global__deaths"
-        )[0].childNodes[1].innerHTML = totalDeaths;
-  
-        // Países
-        const tbody = document.getElementsByTagName("tbody")[0];
-        var countries = countries.data;
-        countries.forEach(function (element, index, array) {
-          const tr = document.createElement("tr");
-          // Bandeira
-          const img = document.createElement("img");
-          img.src = element.countryInfo.flag;
-          img.alt = element.countryInfo.iso2;
-          img.setAttribute("title", element.countryInfo.iso2);
-          var values = [
-            element.country,
-            element.cases,
-            element.deaths,
-            element.recovered
-          ];
-          values.forEach(function (element, index, array) {
-            const td = document.createElement("td");
-            element =
-              validation.isNumber(element) === "NaN"
-                ? element
-                : element.toLocaleString();
-            if (!index) {
-              let text = document.createTextNode(element);
-              td.appendChild(img);
-              td.appendChild(text);
-            } else {
-              td.innerHTML = element;
-            }
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-      })
-    )
-    .catch(function (error) {
-      console.log(error);
-    });
-  
-  var validation = {
-    isNumber: function (str) {
-      //  /^\d+$/g é igual a /^[0-9]+$/g;
-      var patt = /^\d+$/g;
-      return patt.test(str);
-    }
-  };
-  
-  var search = document.getElementById("search");
-  search.addEventListener("keyup", function () {
-    var value = this.value.toLowerCase();
-    console.log("value", value);
-    const rows = document.querySelectorAll("tbody tr");
-    const rowsArray = Array.prototype.slice.call(rows);
-    rowsArray.forEach(function (element, index, array) {
-      var tdCountry = element.childNodes[0].innerHTML.toLowerCase();
-      if (tdCountry.indexOf(value) > -1) {
-        //console.log(tdCountry, tdCountry.indexOf(value));
-        element.classList.remove("hidden");
-      } else {
-        element.classList.add("hidden");
-      }
-    });
-  });
-  
-  function changeOrder() {
-    const value = document.getElementById("select").value;
-    const index = document.getElementById("select").selectedIndex;
-    //console.log(value, index);
-    const rows = document.querySelectorAll("tbody tr");
-    const rowsArray = Array.prototype.slice.call(rows);
-    rowsArray
-      .sort(function (A, B) {
-        var num1 = A.childNodes[index].innerHTML;
-        num1 = num1.replace(",", "");
-        var num2 = B.childNodes[index].innerHTML;
-        num2 = num2.replace(",", "");
-        return num2 - num1;
-      })
-      .forEach(function (tr) {
-        tr.parentElement.appendChild(tr);
-      });
-    //console.log(rowsArray);
-  }
-  document.querySelector(".arrow__up").addEventListener("click", function () {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-  
-  document.querySelector(".arrow__down").addEventListener("click", function () {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
-  });
- </script>
-</html>
+<div class="social">
+  <ul>
+    <li>
+      <a href="https://twitter.com/ialexsilva" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/ialexsilva/" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.linkedin.com/in/ialexsilva/" target="_blank">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  </ul>
+</div>
